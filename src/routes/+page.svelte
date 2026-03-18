@@ -1,50 +1,76 @@
 <script lang="ts">
-  import { onMount } from 'svelte';
-  import { Engine, Scene, FreeCamera, Vector3, Color4 } from '@babylonjs/core';
-  import { buildEgypt } from '$lib/egypt';
-
-  let canvas: HTMLCanvasElement;
-
-  const setupCamera = (scene: Scene) => {
-    const camera = new FreeCamera('camera', new Vector3(5, 2, -3), scene);
-    camera.setTarget(new Vector3(10, 5, 65));
-    camera.attachControl(canvas, true);
-    camera.speed = 5;
-    camera.minZ = 0.1;
-    camera.keysUp       = [87];
-    camera.keysDown     = [83];
-    camera.keysLeft     = [65];
-    camera.keysRight    = [68];
-    camera.keysUpward   = [69];
-    camera.keysDownward = [81];
-  };
-
-  const setupXR = async (scene: Scene) => {
-    const supported = await (navigator as any).xr?.isSessionSupported?.('immersive-vr').catch(() => false);
-    if (!supported) return;
-    await scene.createDefaultXRExperienceAsync({
-      uiOptions: { sessionMode: 'immersive-vr' },
-      optionalFeatures: true,
-    });
-  };
-
-  onMount(() => {
-    (async () => {
-      const engine = new Engine(canvas, true, { preserveDrawingBuffer: true });
-      const scene = new Scene(engine);
-      scene.clearColor = new Color4(0, 0, 0, 1);
-
-      setupCamera(scene);
-      buildEgypt(scene);
-      await setupXR(scene);
-
-      engine.runRenderLoop(() => scene.render());
-      window.addEventListener('resize', () => engine.resize());
-    })();
-  });
+  const scenes = [
+    { href: '/egypt', label: 'Ancient Egypt', description: 'Pyramids, Sphinx, desert sun' },
+    { href: '/cherry-blossom', label: 'Cherry Blossom Garden', description: 'Torii gates, pagoda, sakura trees' },
+  ];
 </script>
 
-<canvas
-  bind:this={canvas}
-  style="width:100vw;height:100vh;display:block;touch-action:none;outline:none"
-></canvas>
+<main>
+  <h1>Immersive Scenes</h1>
+  <nav>
+    {#each scenes as { href, label, description }}
+      <a {href}>
+        <span class="label">{label}</span>
+        <span class="desc">{description}</span>
+      </a>
+    {/each}
+  </nav>
+</main>
+
+<style>
+  main {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: #0a0a0a;
+    color: #fff;
+    font-family: system-ui, sans-serif;
+    gap: 2rem;
+  }
+
+  h1 {
+    font-size: 2rem;
+    font-weight: 300;
+    letter-spacing: 0.1em;
+    margin: 0;
+    opacity: 0.9;
+  }
+
+  nav {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    width: 100%;
+    max-width: 420px;
+    padding: 0 1.5rem;
+  }
+
+  a {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    padding: 1.25rem 1.5rem;
+    border: 1px solid #333;
+    border-radius: 8px;
+    text-decoration: none;
+    color: inherit;
+    transition: border-color 0.15s, background 0.15s;
+  }
+
+  a:hover {
+    border-color: #666;
+    background: #111;
+  }
+
+  .label {
+    font-size: 1.1rem;
+    font-weight: 500;
+  }
+
+  .desc {
+    font-size: 0.85rem;
+    opacity: 0.5;
+  }
+</style>
