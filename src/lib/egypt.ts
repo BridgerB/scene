@@ -1,4 +1,4 @@
-import { Scene, Color3, Vector3, StandardMaterial, MeshBuilder, Mesh } from '@babylonjs/core';
+import { Scene, Color3, Vector3, PBRMaterial, MeshBuilder, Mesh } from '@babylonjs/core';
 
 const rng = (seed: number) => {
   const x = Math.sin(seed * 127.1 + 311.7) * 43758.5;
@@ -6,9 +6,11 @@ const rng = (seed: number) => {
 };
 
 const unlitMat = (scene: Scene, name: string, r: number, g: number, b: number, alpha = 1) => {
-  const m = new StandardMaterial(name, scene);
+  const m = new PBRMaterial(name, scene);
   m.emissiveColor = new Color3(r, g, b);
-  m.disableLighting = true;
+  m.albedoColor = Color3.Black();
+  m.metallic = 0;
+  m.roughness = 1;
   if (alpha < 1) m.alpha = alpha;
   return m;
 };
