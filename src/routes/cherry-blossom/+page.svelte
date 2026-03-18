@@ -19,25 +19,13 @@
     camera.keysDownward = [81];
   };
 
-  const setupXR = async (scene: Scene) => {
-    const supported = await (navigator as any).xr?.isSessionSupported?.('immersive-vr').catch(() => false);
-    if (!supported) return;
-    await scene.createDefaultXRExperienceAsync({
-      uiOptions: { sessionMode: 'immersive-vr' },
-      optionalFeatures: true,
-    });
-  };
-
   onMount(() => {
     (async () => {
       const engine = new Engine(canvas, true, { preserveDrawingBuffer: true });
       const scene = new Scene(engine);
       scene.clearColor = new Color4(0, 0, 0, 1);
-
       setupCamera(scene);
       buildCherryBlossom(scene);
-      await setupXR(scene);
-
       engine.runRenderLoop(() => scene.render());
       window.addEventListener('resize', () => engine.resize());
     })();
