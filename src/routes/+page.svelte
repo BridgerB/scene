@@ -2,6 +2,7 @@
   const scenes = [
     { href: '/egypt', label: 'Ancient Egypt', description: 'Pyramids, Sphinx, desert sun' },
     { href: '/cherry-blossom', label: 'Cherry Blossom Garden', description: 'Torii gates, pagoda, sakura trees' },
+    { href: '/dune', label: 'Dune: Imperial Throne Room', description: 'Colossal pillars, soldiers, teal throne' },
   ];
 </script>
 
